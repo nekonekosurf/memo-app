@@ -27,7 +27,11 @@
     { "text": "【当日朝】鍵が2つあるか確認する", "done": false },
     { "text": "【移動中】電車の中でインドネシア入国に必要な書類を記入する", "done": false },
     { "text": "【空港】酔い止め薬を買う", "done": false },
-    { "text": "【空港】SIMカード or WiFiレンタルを手配する", "done": false }
+    { "text": "【空港】SIMカード or WiFiレンタルを手配する", "done": false },
+    { "text": "【前日】ホテルの予約確認", "done": false },
+    { "text": "【前日】機内で見るNetflixをダウンロードしておく", "done": false },
+    { "text": "【前日】SIMカード（1GB）が使えるか確認する", "done": false },
+    { "text": "【前日】Trip.comでSIMカードの使い方を確認する", "done": false }
   ],
   "notes": [
     { "text": "4:00 起床", "date": "2026-02-19" },
