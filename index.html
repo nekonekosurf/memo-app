@@ -241,6 +241,49 @@
       line-height: 1.6;
     }
 
+    /* Suggestions */
+    .suggestion-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 0.75rem;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .suggestion-card summary {
+      padding: 0.85rem 1rem;
+      font-weight: 600;
+      font-size: 0.92rem;
+      cursor: pointer;
+      color: var(--text);
+      background: #faf8f5;
+      border-bottom: 1px solid var(--border);
+    }
+    .suggestion-card[open] summary { border-bottom-color: var(--border); }
+    .suggestion-card .sg-list {
+      list-style: none;
+      padding: 0.75rem 1rem;
+    }
+    .suggestion-card .sg-list li {
+      font-size: 0.87rem;
+      color: var(--text-light);
+      padding: 0.35rem 0;
+      padding-left: 1rem;
+      position: relative;
+      line-height: 1.6;
+    }
+    .suggestion-card .sg-list li::before {
+      content: '\25B8';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+    .section-title.suggest-title {
+      border-bottom-color: var(--accent);
+      color: #9a6b20;
+      margin-top: 2rem;
+    }
+
     /* Error banner */
     .error-banner {
       background: #fef2f2;
@@ -368,6 +411,20 @@
         html += '</li>';
       });
       html += '</ul>';
+    }
+
+    // Suggestions section
+    var suggestions = data.suggestions || [];
+    if (suggestions.length > 0) {
+      html += '<div class="section-title suggest-title">SUGGESTIONS <span class="section-count">' + suggestions.length + ' topics</span></div>';
+      suggestions.forEach(function(sg) {
+        html += '<details class="suggestion-card"><summary>' + escapeHtml(sg.title) + '</summary>';
+        html += '<ul class="sg-list">';
+        (sg.items || []).forEach(function(item) {
+          html += '<li>' + escapeHtml(item) + '</li>';
+        });
+        html += '</ul></details>';
+      });
     }
 
     contentEl.innerHTML = html;
