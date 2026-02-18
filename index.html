@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memo</title>
+  <style>
+    :root {
+      --primary: #4a6741;
+      --primary-light: #6b8f60;
+      --accent: #e8a44a;
+      --bg: #f5f3ef;
+      --card: #ffffff;
+      --text: #2c2c2c;
+      --text-light: #7a7a7a;
+      --border: #e5e1db;
+      --done: #b8c4b5;
+      --shadow: 0 1px 12px rgba(0,0,0,0.05);
+      --radius: 10px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.03);
+    }
+    .header-inner {
+      max-width: 640px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header h1 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .header-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-primary:hover { background: var(--primary-light); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-light);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { background: var(--bg); color: var(--text); }
+    .btn-sm { padding: 0.35rem 0.7rem; font-size: 0.8rem; }
+
+    /* Main */
+    main {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 6rem;
+    }
+
+    /* Status bar */
+    .status {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      font-size: 0.82rem;
+      color: var(--text-light);
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 0.4rem;
+    }
+    .status-dot.ok { background: #5cb85c; }
+    .status-dot.err { background: #d9534f; }
+    .status-dot.loading { background: var(--accent); animation: pulse 1s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    /* Memo list */
+    .memo-list { list-style: none; }
+    .memo-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.15rem;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      box-shadow: var(--shadow);
+      transition: all 0.15s;
+    }
+    .memo-item:hover { border-color: #ccc; }
+    .memo-item.done { opacity: 0.55; }
+    .memo-item.done .memo-text { text-decoration: line-through; color: var(--done); }
+
+    /* Checkbox */
+    .checkbox {
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: default;
+      transition: all 0.15s;
+    }
+    .memo-item.done .checkbox {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+    .memo-item.done .checkbox::after {
+      content: '';
+      width: 6px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+      margin-bottom: 2px;
+    }
+
+    .memo-body { flex: 1; min-width: 0; }
+    .memo-text {
+      font-size: 0.95rem;
+      font-weight: 500;
+      word-break: break-word;
+    }
+    .memo-date {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      margin-top: 0.2rem;
+    }
+
+    /* Empty state */
+    .empty {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-light);
+    }
+    .empty p { font-size: 0.95rem; margin-bottom: 1rem; }
+
+    /* Loading */
+    .loading-spinner {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    /* How-to section */
+    .howto {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      margin-top: 2rem;
+      box-shadow: var(--shadow);
+    }
+    .howto summary {
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      color: var(--primary);
+    }
+    .howto-content {
+      margin-top: 0.75rem;
+      font-size: 0.85rem;
+      color: var(--text-light);
+      line-height: 1.8;
+    }
+    .howto-content code {
+      background: #f0ede8;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.82rem;
+    }
+    .howto-content pre {
+      background: #2c2c2c;
+      color: #e8e8e8;
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 0.75rem 0;
+      overflow-x: auto;
+      font-size: 0.82rem;
+      line-height: 1.6;
+    }
+
+    /* Error banner */
+    .error-banner {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+      color: #991b1b;
+      display: none;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.75rem;
+      color: var(--text-light);
+    }
+
+    @media (max-width: 480px) {
+      .header { padding: 1rem; }
+      .header h1 { font-size: 1.15rem; }
+      .btn { padding: 0.45rem 0.8rem; font-size: 0.82rem; }
+      main { padding: 1rem 0.75rem 5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <h1>Memo</h1>
+    <div class="header-actions">
+      <a id="addBtn" class="btn btn-primary" target="_blank" rel="noopener">+ Add</a>
+      <a id="editBtn" class="btn btn-ghost" target="_blank" rel="noopener">Edit</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="status">
+    <span><span id="statusDot" class="status-dot loading"></span><span id="statusText">Loading...</span></span>
+    <span id="countText"></span>
+  </div>
+
+  <div id="errorBanner" class="error-banner"></div>
+  <div id="content"><div class="loading-spinner">Loading memos...</div></div>
+
+  <details class="howto">
+    <summary>How to use</summary>
+    <div class="howto-content">
+      <p><strong>メモの追加:</strong> 上の <code>+ Add</code> をタップして GitHub 上で <code>memos.json</code> に追記してください。</p>
+      <p><strong>チェックを付ける:</strong> <code>Edit</code> をタップして <code>"done": false</code> を <code>"done": true</code> に変更。</p>
+      <p><strong>追加フォーマット:</strong></p>
+      <pre>{
+  "text": "your memo here",
+  "done": false,
+  "date": "2026-02-18"
+}</pre>
+      <p>配列の最後に追加して、前の要素の <code>}</code> の後ろにカンマ <code>,</code> を忘れずに。</p>
+    </div>
+  </details>
+</main>
+
+<footer>Powered by GitHub Pages + GitHub API</footer>
+
+<script>
+(function() {
+  const OWNER = 'nekonekosurf';
+  const REPO = 'memo-app';
+  const FILE = 'memos.json';
+  const BRANCH = 'master';
+
+  const API_URL = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE}?ref=${BRANCH}`;
+  const EDIT_URL = `https://github.com/${OWNER}/${REPO}/edit/${BRANCH}/${FILE}`;
+  const RAW_URL = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${FILE}`;
+
+  document.getElementById('addBtn').href = EDIT_URL;
+  document.getElementById('editBtn').href = EDIT_URL;
+
+  const contentEl = document.getElementById('content');
+  const statusDot = document.getElementById('statusDot');
+  const statusText = document.getElementById('statusText');
+  const countText = document.getElementById('countText');
+  const errorBanner = document.getElementById('errorBanner');
+
+  function setStatus(type, text) {
+    statusDot.className = 'status-dot ' + type;
+    statusText.textContent = text;
+  }
+
+  function showError(msg) {
+    errorBanner.textContent = msg;
+    errorBanner.style.display = 'block';
+  }
+
+  function renderMemos(memos) {
+    if (!memos || memos.length === 0) {
+      contentEl.innerHTML = '<div class="empty"><p>No memos yet.</p><a class="btn btn-primary" href="' + EDIT_URL + '" target="_blank">Add your first memo</a></div>';
+      countText.textContent = '0 items';
+      return;
+    }
+
+    const doneCount = memos.filter(m => m.done).length;
+    countText.textContent = doneCount + '/' + memos.length + ' done';
+
+    const ul = document.createElement('ul');
+    ul.className = 'memo-list';
+
+    memos.forEach(function(memo) {
+      const li = document.createElement('li');
+      li.className = 'memo-item' + (memo.done ? ' done' : '');
+
+      const cb = document.createElement('div');
+      cb.className = 'checkbox';
+
+      const body = document.createElement('div');
+      body.className = 'memo-body';
+
+      const text = document.createElement('div');
+      text.className = 'memo-text';
+      text.textContent = memo.text;
+
+      const date = document.createElement('div');
+      date.className = 'memo-date';
+      date.textContent = memo.date || '';
+
+      body.appendChild(text);
+      body.appendChild(date);
+      li.appendChild(cb);
+      li.appendChild(body);
+      ul.appendChild(li);
+    });
+
+    contentEl.innerHTML = '';
+    contentEl.appendChild(ul);
+  }
+
+  async function loadMemos() {
+    setStatus('loading', 'Loading...');
+
+    try {
+      // Try GitHub API first for latest content
+      const res = await fetch(API_URL, {
+        headers: { 'Accept': 'application/vnd.github.v3+json' }
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const decoded = atob(data.content);
+        const memos = JSON.parse(new TextDecoder().decode(
+          Uint8Array.from(decoded, c => c.charCodeAt(0))
+        ));
+        renderMemos(memos);
+        setStatus('ok', 'Synced from GitHub');
+        return;
+      }
+
+      // Fallback: raw.githubusercontent.com
+      const rawRes = await fetch(RAW_URL + '?t=' + Date.now());
+      if (rawRes.ok) {
+        const memos = await rawRes.json();
+        renderMemos(memos);
+        setStatus('ok', 'Loaded (cached)');
+        return;
+      }
+
+      throw new Error('Could not fetch memos');
+    } catch (e) {
+      // Final fallback: local file (when developing or same-origin)
+      try {
+        const localRes = await fetch(FILE + '?t=' + Date.now());
+        if (localRes.ok) {
+          const memos = await localRes.json();
+          renderMemos(memos);
+          setStatus('ok', 'Loaded (local)');
+          return;
+        }
+      } catch (_) {}
+
+      setStatus('err', 'Error');
+      showError('Failed to load memos. Check your connection or try refreshing.');
+      contentEl.innerHTML = '<div class="empty"><p>Could not load memos.</p></div>';
+    }
+  }
+
+  loadMemos();
+})();
+</script>
+
+</body>
+</html>
