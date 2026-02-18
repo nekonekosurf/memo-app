@@ -9,6 +9,7 @@
       --primary: #4a6741;
       --primary-light: #6b8f60;
       --accent: #e8a44a;
+      --note-accent: #5b7fb5;
       --bg: #f5f3ef;
       --card: #ffffff;
       --text: #2c2c2c;
@@ -44,15 +45,8 @@
       align-items: center;
       justify-content: space-between;
     }
-    .header h1 {
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--primary);
-    }
-    .header-actions {
-      display: flex;
-      gap: 0.5rem;
-    }
+    .header h1 { font-size: 1.3rem; font-weight: 700; color: var(--primary); }
+    .header-actions { display: flex; gap: 0.5rem; }
 
     /* Buttons */
     .btn {
@@ -68,18 +62,10 @@
       text-decoration: none;
       transition: all 0.15s;
     }
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-    }
+    .btn-primary { background: var(--primary); color: white; }
     .btn-primary:hover { background: var(--primary-light); }
-    .btn-ghost {
-      background: transparent;
-      color: var(--text-light);
-      border: 1px solid var(--border);
-    }
+    .btn-ghost { background: transparent; color: var(--text-light); border: 1px solid var(--border); }
     .btn-ghost:hover { background: var(--bg); color: var(--text); }
-    .btn-sm { padding: 0.35rem 0.7rem; font-size: 0.8rem; }
 
     /* Main */
     main {
@@ -93,87 +79,121 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 1rem;
+      margin-bottom: 1.25rem;
       font-size: 0.82rem;
       color: var(--text-light);
     }
     .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      display: inline-block;
-      margin-right: 0.4rem;
+      width: 8px; height: 8px; border-radius: 50%;
+      display: inline-block; margin-right: 0.4rem;
     }
     .status-dot.ok { background: #5cb85c; }
     .status-dot.err { background: #d9534f; }
     .status-dot.loading { background: var(--accent); animation: pulse 1s infinite; }
     @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-    /* Memo list */
-    .memo-list { list-style: none; }
-    .memo-item {
+    /* Section titles */
+    .section-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--primary);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .section-title.notes-title {
+      border-bottom-color: var(--note-accent);
+      color: var(--note-accent);
+      margin-top: 2rem;
+    }
+    .section-count {
+      font-weight: 400;
+      font-size: 0.78rem;
+      color: var(--text-light);
+    }
+
+    /* Todo list */
+    .todo-list { list-style: none; }
+    .todo-item {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 1rem 1.15rem;
-      margin-bottom: 0.6rem;
+      padding: 0.85rem 1rem;
+      margin-bottom: 0.5rem;
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 0.75rem;
       box-shadow: var(--shadow);
       transition: all 0.15s;
     }
-    .memo-item:hover { border-color: #ccc; }
-    .memo-item.done { opacity: 0.55; }
-    .memo-item.done .memo-text { text-decoration: line-through; color: var(--done); }
+    .todo-item:hover { border-color: #ccc; }
+    .todo-item.done { opacity: 0.5; }
+    .todo-item.done .todo-text { text-decoration: line-through; color: var(--done); }
 
-    /* Checkbox */
     .checkbox {
-      width: 22px;
-      height: 22px;
+      width: 22px; height: 22px;
       border: 2px solid var(--border);
       border-radius: 6px;
       flex-shrink: 0;
-      margin-top: 2px;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: default;
       transition: all 0.15s;
     }
-    .memo-item.done .checkbox {
+    .todo-item.done .checkbox {
       background: var(--primary);
       border-color: var(--primary);
     }
-    .memo-item.done .checkbox::after {
+    .todo-item.done .checkbox::after {
       content: '';
-      width: 6px;
-      height: 10px;
+      width: 6px; height: 10px;
       border: solid white;
       border-width: 0 2px 2px 0;
       transform: rotate(45deg);
       margin-bottom: 2px;
     }
+    .todo-text { font-size: 0.93rem; font-weight: 500; word-break: break-word; }
 
-    .memo-body { flex: 1; min-width: 0; }
-    .memo-text {
-      font-size: 0.95rem;
+    /* Notes list */
+    .notes-list { list-style: none; }
+    .note-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--note-accent);
+      border-radius: var(--radius);
+      padding: 1rem 1.15rem;
+      margin-bottom: 0.6rem;
+      box-shadow: var(--shadow);
+      transition: all 0.15s;
+    }
+    .note-item:hover { border-color: #ccc; border-left-color: var(--note-accent); }
+    .note-text {
+      font-size: 0.93rem;
       font-weight: 500;
       word-break: break-word;
+      white-space: pre-wrap;
     }
-    .memo-date {
-      font-size: 0.75rem;
+    .note-date {
+      font-size: 0.73rem;
       color: var(--text-light);
-      margin-top: 0.2rem;
+      margin-top: 0.35rem;
     }
 
     /* Empty state */
-    .empty {
+    .empty-notes {
       text-align: center;
-      padding: 3rem 1rem;
+      padding: 1.5rem;
       color: var(--text-light);
+      font-size: 0.88rem;
+      background: var(--card);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
     }
-    .empty p { font-size: 0.95rem; margin-bottom: 1rem; }
 
     /* Loading */
     .loading-spinner {
@@ -233,7 +253,6 @@
       display: none;
     }
 
-    /* Footer */
     footer {
       text-align: center;
       padding: 1rem;
@@ -255,8 +274,7 @@
   <div class="header-inner">
     <h1>Memo</h1>
     <div class="header-actions">
-      <a id="addBtn" class="btn btn-primary" target="_blank" rel="noopener">+ Add</a>
-      <a id="editBtn" class="btn btn-ghost" target="_blank" rel="noopener">Edit</a>
+      <a id="editBtn" class="btn btn-primary" target="_blank" rel="noopener">Edit on GitHub</a>
     </div>
   </div>
 </header>
@@ -268,20 +286,17 @@
   </div>
 
   <div id="errorBanner" class="error-banner"></div>
-  <div id="content"><div class="loading-spinner">Loading memos...</div></div>
+  <div id="content"><div class="loading-spinner">Loading...</div></div>
 
   <details class="howto">
     <summary>How to use</summary>
     <div class="howto-content">
-      <p><strong>メモの追加:</strong> 上の <code>+ Add</code> をタップして GitHub 上で <code>memos.json</code> に追記してください。</p>
-      <p><strong>チェックを付ける:</strong> <code>Edit</code> をタップして <code>"done": false</code> を <code>"done": true</code> に変更。</p>
-      <p><strong>追加フォーマット:</strong></p>
-      <pre>{
-  "text": "your memo here",
-  "done": false,
-  "date": "2026-02-18"
-}</pre>
-      <p>配列の最後に追加して、前の要素の <code>}</code> の後ろにカンマ <code>,</code> を忘れずに。</p>
+      <p><strong>Edit on GitHub</strong> ボタンから <code>memos.json</code> を直接編集できます。</p>
+      <p><strong>TODO を追加:</strong></p>
+      <pre>{ "text": "やること", "done": false }</pre>
+      <p><strong>メモを追加:</strong></p>
+      <pre>{ "text": "メモ内容", "date": "2026-02-18" }</pre>
+      <p><strong>チェックを付ける:</strong> <code>"done": false</code> を <code>"done": true</code> に変更して Commit。</p>
     </div>
   </details>
 </main>
@@ -299,7 +314,6 @@
   const EDIT_URL = `https://github.com/${OWNER}/${REPO}/edit/${BRANCH}/${FILE}`;
   const RAW_URL = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${FILE}`;
 
-  document.getElementById('addBtn').href = EDIT_URL;
   document.getElementById('editBtn').href = EDIT_URL;
 
   const contentEl = document.getElementById('content');
@@ -318,97 +332,99 @@
     errorBanner.style.display = 'block';
   }
 
-  function renderMemos(memos) {
-    if (!memos || memos.length === 0) {
-      contentEl.innerHTML = '<div class="empty"><p>No memos yet.</p><a class="btn btn-primary" href="' + EDIT_URL + '" target="_blank">Add your first memo</a></div>';
-      countText.textContent = '0 items';
-      return;
+  function renderData(data) {
+    var todos = data.todos || [];
+    var notes = data.notes || [];
+
+    var doneCount = todos.filter(function(t) { return t.done; }).length;
+    countText.textContent = 'TODO: ' + doneCount + '/' + todos.length + ' done';
+
+    var html = '';
+
+    // TODO section
+    html += '<div class="section-title">TODO <span class="section-count">' + doneCount + ' / ' + todos.length + '</span></div>';
+    html += '<ul class="todo-list">';
+    todos.forEach(function(todo) {
+      var cls = todo.done ? 'todo-item done' : 'todo-item';
+      html += '<li class="' + cls + '">';
+      html += '<div class="checkbox"></div>';
+      html += '<span class="todo-text">' + escapeHtml(todo.text) + '</span>';
+      html += '</li>';
+    });
+    html += '</ul>';
+
+    // Notes section
+    html += '<div class="section-title notes-title">NOTES <span class="section-count">' + notes.length + ' items</span></div>';
+    if (notes.length === 0) {
+      html += '<div class="empty-notes">No notes yet. Edit on GitHub to add.</div>';
+    } else {
+      html += '<ul class="notes-list">';
+      notes.forEach(function(note) {
+        html += '<li class="note-item">';
+        html += '<div class="note-text">' + escapeHtml(note.text) + '</div>';
+        if (note.date) {
+          html += '<div class="note-date">' + escapeHtml(note.date) + '</div>';
+        }
+        html += '</li>';
+      });
+      html += '</ul>';
     }
 
-    const doneCount = memos.filter(m => m.done).length;
-    countText.textContent = doneCount + '/' + memos.length + ' done';
-
-    const ul = document.createElement('ul');
-    ul.className = 'memo-list';
-
-    memos.forEach(function(memo) {
-      const li = document.createElement('li');
-      li.className = 'memo-item' + (memo.done ? ' done' : '');
-
-      const cb = document.createElement('div');
-      cb.className = 'checkbox';
-
-      const body = document.createElement('div');
-      body.className = 'memo-body';
-
-      const text = document.createElement('div');
-      text.className = 'memo-text';
-      text.textContent = memo.text;
-
-      const date = document.createElement('div');
-      date.className = 'memo-date';
-      date.textContent = memo.date || '';
-
-      body.appendChild(text);
-      body.appendChild(date);
-      li.appendChild(cb);
-      li.appendChild(body);
-      ul.appendChild(li);
-    });
-
-    contentEl.innerHTML = '';
-    contentEl.appendChild(ul);
+    contentEl.innerHTML = html;
   }
 
-  async function loadMemos() {
+  function escapeHtml(str) {
+    var d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  async function loadData() {
     setStatus('loading', 'Loading...');
 
     try {
-      // Try GitHub API first for latest content
-      const res = await fetch(API_URL, {
+      var res = await fetch(API_URL, {
         headers: { 'Accept': 'application/vnd.github.v3+json' }
       });
 
       if (res.ok) {
-        const data = await res.json();
-        const decoded = atob(data.content);
-        const memos = JSON.parse(new TextDecoder().decode(
-          Uint8Array.from(decoded, c => c.charCodeAt(0))
+        var apiData = await res.json();
+        var decoded = atob(apiData.content);
+        var data = JSON.parse(new TextDecoder().decode(
+          Uint8Array.from(decoded, function(c) { return c.charCodeAt(0); })
         ));
-        renderMemos(memos);
+        renderData(data);
         setStatus('ok', 'Synced from GitHub');
         return;
       }
 
-      // Fallback: raw.githubusercontent.com
-      const rawRes = await fetch(RAW_URL + '?t=' + Date.now());
+      var rawRes = await fetch(RAW_URL + '?t=' + Date.now());
       if (rawRes.ok) {
-        const memos = await rawRes.json();
-        renderMemos(memos);
+        var data = await rawRes.json();
+        renderData(data);
         setStatus('ok', 'Loaded (cached)');
         return;
       }
 
-      throw new Error('Could not fetch memos');
+      throw new Error('Could not fetch data');
     } catch (e) {
-      // Final fallback: local file (when developing or same-origin)
       try {
-        const localRes = await fetch(FILE + '?t=' + Date.now());
+        var localRes = await fetch(FILE + '?t=' + Date.now());
         if (localRes.ok) {
-          const memos = await localRes.json();
-          renderMemos(memos);
+          var data = await localRes.json();
+          renderData(data);
           setStatus('ok', 'Loaded (local)');
           return;
         }
       } catch (_) {}
 
       setStatus('err', 'Error');
-      showError('Failed to load memos. Check your connection or try refreshing.');
-      contentEl.innerHTML = '<div class="empty"><p>Could not load memos.</p></div>';
+      showError('Failed to load data. Check your connection or try refreshing.');
+      contentEl.innerHTML = '<div class="empty-notes">Could not load data.</div>';
     }
   }
 
-  loadMemos();
+  loadData();
 })();
 </script>
 
